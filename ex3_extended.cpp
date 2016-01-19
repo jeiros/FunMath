@@ -8,7 +8,7 @@
  with big steps.
 */
 #include <iostream>
-#include <cmath>
+#include <cmath> // To acces pi real value as M_PI
 #include <time.h>
 
 
@@ -43,9 +43,8 @@ std::pair<int,int> Nmin_range_search(double min_error,int step) {
 }
 
 int binary_search(int low, int high, double min_error) {
-    /*Binary search implementation. Ends the while loop
-    when low = high (as we want to find the point
-    where the error is just below min_error)*/
+    /*Binary search between low and high, until we find
+    the mid value just below min_error*/
     double error = 1;
     while (low < high) {
         int mid = low + (high-low)/2;

@@ -37,7 +37,7 @@
 */
 
 #include <iostream>
-#include <cmath>
+#include <cmath> // To acces pi real value as M_PI
 #include <time.h>
 
 
@@ -45,17 +45,13 @@
 double aproximate_pi(int iterations) {
     double valor = 0.0;
     for (int i=1; i <= iterations; i++) {
-        /*Use a for loop to calculate the acumulated 
-        loop (summatory)*/
         valor = valor + 1/(1+pow((i-0.5)/iterations, 2)); 
     }
-    double result = 4*valor/iterations; // Calculate the final approximation of pi
+    double result = 4*valor/iterations;
     return result;
 }
 
 double compute_pi_error(double approximation) {
-    /*Use the cmath library to acces the "real" 
-    value of pi as M_PI constant*/
     double result = approximation - M_PI;
     return result;
 }
@@ -72,9 +68,8 @@ std::pair<int,int> Nmin_range_search(double min_error,int step) {
 }
 
 int binary_search(int low, int high, double min_error) {
-    /*Binary search implementation. Ends the while loop
-    when low = high (as we want to find the point
-    where the error is just below min_error)*/
+    /*Binary search between low and high, until we find
+    the mid value just below min_error*/
     double error;
     while (low < high) {
         int mid = low + (high-low)/2;
@@ -91,9 +86,10 @@ int binary_search(int low, int high, double min_error) {
 
 int calculate_OptimalStep (double error) {
     /* This function calculates the Optimal Steps to be used
-    for a particular accuracy. I fitted the following linear
+    for a particular accuracy. Use the following linear
     relation: log10(OptStep) = -0.4289*log10(Error) - 0.2138
     with R^2 = 0.9647
+    See ex3_extended.cpp in https://github.com/jeiros/FunMath
     */
     double result = pow(10, (-0.4289*log10(error)) - 0.2138);
     int optstep = (int)(result + 0.5);
