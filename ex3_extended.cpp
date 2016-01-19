@@ -12,27 +12,27 @@
 #include <time.h>
 
 
-
+/*Get number of iterations, return the
+approximation of pi with the given 
+formula in the exercise*/
 double aproximate_pi(int iterations) {
     double valor = 0.0;
     for (int i=1; i <= iterations; i++) {
-        /*Use a for loop to calculate the acumulated 
-        loop (summatory)*/
         valor = valor + 1/(1+pow((i-0.5)/iterations, 2)); 
     }
-    double result = 4*valor/iterations; // Calculate the final approximation of pi
+    double result = 4*valor/iterations;
     return result;
 }
 
 double compute_pi_error(double approximation) {
-    /*Use the cmath library to acces the "real" 
-    value of pi as M_PI constant*/
     double result = approximation - M_PI;
     return result;
 }
 
+/*Get the accuracy to be reach and the step (>1) to be used
+to find the ranges where Nmin is. Return the low and 
+high range between Nmin*/
 std::pair<int,int> Nmin_range_search(double min_error,int step) {
-    /*Use a step > 1 to search the boundaries of Nmin*/
     double error = 1;
     int i = 0;
     while (error > min_error) {
@@ -42,9 +42,9 @@ std::pair<int,int> Nmin_range_search(double min_error,int step) {
     return std::make_pair(i - step, i);
 }
 
+/*Binary search between low and high, until we find
+the mid value just below min_error and return it*/
 int binary_search(int low, int high, double min_error) {
-    /*Binary search between low and high, until we find
-    the mid value just below min_error*/
     double error = 1;
     while (low < high) {
         int mid = low + (high-low)/2;
@@ -58,17 +58,17 @@ int binary_search(int low, int high, double min_error) {
     return high; // Or low, as at this point low=high
 }
 
-int main() {
-  /*
-  To establish the relationship between the step that has to 
-  be used and the desired accuracy, I use 5000 different steps for each 
-  accuracy value ranging from 1e-4 to 1e-9. 
+/*
+To establish the relationship between the step that has to 
+be used and the desired accuracy, I use 5000 different steps for each 
+accuracy value ranging from 1e-4 to 1e-9. 
 
-  The program prints all the combinations, which can be output to a .csv 
-  file from the command line and loaded easily to R. The linear relation in the minimum of the curves
-  is apparent when log10() axes are used (sweep_averages_withfit.png file shows those
-  curves with the linear fit of their minima). 
-  */
+The program prints all the combinations, which can be output to a .csv 
+file from the command line and loaded easily to R. The linear relation in the minimum of the curves
+is apparent when log10() axes are used (sweep_averages_withfit.png file shows those
+curves with the linear fit of their minima). 
+*/
+int main() {
     clock_t t;
     double errors[6] = {1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9};
     int steps[5000];
@@ -83,9 +83,8 @@ int main() {
       {
           clock_t sum_of_times = 0;
           int low_N, high_N, solution;
-          for (int count = 1; count < 10; ++count)
-          /*Calculate each error-step pair 10 times and average to account for 
-          changes in the OS activity (gives a smoother graph)*/
+          for (int count = 1; count < 10; ++count)/*Calculate each error-step pair 10 times  
+          and average to account for changes in the OS activity (gives a smoother graph)*/
           {
               t = clock();
               std::pair<int, int> answer = Nmin_range_search(errors[i], steps[j]);

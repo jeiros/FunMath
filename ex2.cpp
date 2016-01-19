@@ -7,7 +7,9 @@
 #include <time.h>
 
 
-
+/*Get number of iterations, return the
+approximation of pi with the given 
+formula in the exercise*/
 double aproximate_pi(int iterations) {
     double valor = 0.0;
     for (int i=1; i <= iterations; i++) {
@@ -22,6 +24,9 @@ double compute_pi_error(double approximation) {
     return result;
 }
 
+/*Print the Nmin for the desired accuracy using 
+brute force and the time it took to do so (in CPU ticks
+and seconds)*/
 int main() {
     clock_t t;
     const double min_error = 1e-6; // Desired accuracy

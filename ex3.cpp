@@ -41,7 +41,9 @@
 #include <time.h>
 
 
-
+/*Get number of iterations, return the
+approximation of pi with the given 
+formula in the exercise*/
 double aproximate_pi(int iterations) {
     double valor = 0.0;
     for (int i=1; i <= iterations; i++) {
@@ -56,8 +58,10 @@ double compute_pi_error(double approximation) {
     return result;
 }
 
+/*Get the accuracy to be reach and the step (>1) to be used
+to find the ranges where Nmin is. Return the low and 
+high range between Nmin*/
 std::pair<int,int> Nmin_range_search(double min_error,int step) {
-    /*Use a step > 1 to search the boundaries of Nmin*/
     double error = 1;
     int i = 0;
     while (error > min_error) {
@@ -67,9 +71,9 @@ std::pair<int,int> Nmin_range_search(double min_error,int step) {
     return std::make_pair(i - step, i);
 }
 
+/*Binary search between low and high, until we find
+the mid value just below min_error and return it*/
 int binary_search(int low, int high, double min_error) {
-    /*Binary search between low and high, until we find
-    the mid value just below min_error*/
     double error;
     while (low < high) {
         int mid = low + (high-low)/2;
@@ -83,21 +87,20 @@ int binary_search(int low, int high, double min_error) {
     return high; // Or low, as at this point low=high
 }
 
-
+/* Get the desired accuracy and return the Optimal Step
+to be used. Uses the following linear relation:
+log10(OptStep) = -0.4289*log10(Error) - 0.2138
+with R^2 = 0.9647
+See ex3_extended.cpp in https://github.com/jeiros/FunMath
+*/
 int calculate_OptimalStep (double error) {
-    /* This function calculates the Optimal Steps to be used
-    for a particular accuracy. Use the following linear
-    relation: log10(OptStep) = -0.4289*log10(Error) - 0.2138
-    with R^2 = 0.9647
-    See ex3_extended.cpp in https://github.com/jeiros/FunMath
-    */
     double result = pow(10, (-0.4289*log10(error)) - 0.2138);
     int optstep = (int)(result + 0.5);
     return optstep;
 }
 
-int main() {
 
+int main() {
     clock_t t;
     const double min_error = 1e-6; // Desired accuracy
 
