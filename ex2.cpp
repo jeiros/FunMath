@@ -38,7 +38,6 @@ int main() {
         below the desired error*/
         i++;
         error = compute_pi_error(aproximate_pi(i));
-        // printf("Error=%E Iteration=%d\n", error, i);
     }
     t = clock() - t;
     printf("Nmin is: %d\n", i);
