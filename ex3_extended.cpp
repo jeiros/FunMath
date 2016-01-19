@@ -2,19 +2,28 @@
  ex3_extended.cpp
  Created by Juan Eiros on 13/01/2016.
 
- Sweep analysis for different accuracy levels to find a relationship
- between the Desired Accuracy and the Optimal Step to be used, in order
- to minimize the tradeoff between the binary search and the range location 
- with big steps.
+To establish the relationship between the step that has to 
+be used and the desired accuracy, I use 5000 different steps for each 
+accuracy value ranging from 1e-4 to 1e-9. 
+
+The program prints all the combinations, which can be output to a .csv 
+file from the command line and loaded easily to R. The linear relation in 
+the minimum of the curves is apparent when log10() axes are used 
+(sweep_averages_withfit.png file shows those curves with the linear fit of
+their minima). 
+
 */
 #include <iostream>
 #include <cmath> // To acces pi real value as M_PI
 #include <time.h>
 
 
-/*Get number of iterations, return the
-approximation of pi with the given 
-formula in the exercise*/
+/*
+    Get the pi aproximate using a specified number of iterations.
+
+    @param iterations number of iterations to use for the aproximate
+    @return the pi aproximate number
+*/
 double aproximate_pi(int iterations) {
     double valor = 0.0;
     for (int i=1; i <= iterations; i++) {
@@ -24,14 +33,26 @@ double aproximate_pi(int iterations) {
     return result;
 }
 
+/*
+    Calculate the error of the aproximation compared to PI. I use
+    the PI defined in cmath.
+
+    @param aproximation The aproximated PI value
+    @return Error of the aproximated PI value
+ */
 double compute_pi_error(double approximation) {
     double result = approximation - M_PI;
     return result;
 }
 
-/*Get the accuracy to be reach and the step (>1) to be used
-to find the ranges where Nmin is. Return the low and 
-high range between Nmin*/
+/*
+    Search the aproximation space using a step.
+
+    @param min_error Minimum accepted error in the aproximation
+    @param step Step used for searching
+    @return a std::pair containing a range in which the error crosses
+            the minimum.
+*/
 std::pair<int,int> Nmin_range_search(double min_error,int step) {
     double error = 1;
     int i = 0;
@@ -42,8 +63,18 @@ std::pair<int,int> Nmin_range_search(double min_error,int step) {
     return std::make_pair(i - step, i);
 }
 
-/*Binary search between low and high, until we find
-the mid value just below min_error and return it*/
+/* 
+    Binary search to narrow down the number of iterations
+    needed after the search gives us a range. I assume 
+    the function is always descending so the aproximation
+    space is ordered. (Although as stated above for errors
+    below e-10 that's not the case).
+
+    @param low Lowest number of iterations in the range
+    @param high Highes number of iterations in the range
+    @param min_error Minimum accepted error in the aproximation
+    @return minimum number of iterations to get our minimum allowed error
+*/
 int binary_search(int low, int high, double min_error) {
     double error = 1;
     while (low < high) {
@@ -59,14 +90,7 @@ int binary_search(int low, int high, double min_error) {
 }
 
 /*
-To establish the relationship between the step that has to 
-be used and the desired accuracy, I use 5000 different steps for each 
-accuracy value ranging from 1e-4 to 1e-9. 
 
-The program prints all the combinations, which can be output to a .csv 
-file from the command line and loaded easily to R. The linear relation in the minimum of the curves
-is apparent when log10() axes are used (sweep_averages_withfit.png file shows those
-curves with the linear fit of their minima). 
 */
 int main() {
     clock_t t;

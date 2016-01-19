@@ -11,7 +11,7 @@
  The speed of the algorithm depends on the desired accuracy, as
  there is a tradeoff between the steps to be used for the 
  range location of Nmin and the cost of the binary search. 
- Using big steps means we find the range of Nmin fast, but then 
+ Using big steps means I find the range of Nmin fast, but then 
  the binary search has to work on a very large range of possible
  Nmins. 
 
@@ -40,10 +40,12 @@
 #include <cmath> // To acces pi real value as M_PI
 #include <time.h>
 
+/*
+    Get the pi aproximate using a specified number of iterations.
 
-/*Get number of iterations, return the
-approximation of pi with the given 
-formula in the exercise*/
+    @param iterations number of iterations to use for the aproximate
+    @return the pi aproximate number
+*/
 double aproximate_pi(int iterations) {
     double valor = 0.0;
     for (int i=1; i <= iterations; i++) {
@@ -53,15 +55,27 @@ double aproximate_pi(int iterations) {
     return result;
 }
 
+/*
+    Calculate the error of the aproximation compared to PI. I use
+    the PI defined in cmath.
+
+    @param aproximation The aproximated PI value
+    @return Error of the aproximated PI value
+ */
 double compute_pi_error(double approximation) {
     double result = approximation - M_PI;
     return result;
 }
 
-/*Get the accuracy to be reach and the step (>1) to be used
-to find the ranges where Nmin is. Return the low and 
-high range between Nmin*/
-std::pair<int,int> Nmin_range_search(double min_error,int step) {
+/*
+    Search the aproximation space using a step.
+
+    @param min_error Minimum accepted error in the aproximation
+    @param step Step used for searching
+    @return a std::pair containing a range in which the error crosses
+            the minimum.
+*/
+std::pair<int,int> Nmin_range_search(double min_error, int step) {
     double error = 1;
     int i = 0;
     while (error > min_error) {
@@ -71,8 +85,18 @@ std::pair<int,int> Nmin_range_search(double min_error,int step) {
     return std::make_pair(i - step, i);
 }
 
-/*Binary search between low and high, until we find
-the mid value just below min_error and return it*/
+/* 
+    Binary search to narrow down the number of iterations
+    needed after the search gives us a range. I assume 
+    the function is always descending so the aproximation
+    space is ordered. (Although as stated above for errors
+    below e-10 that's not the case).
+
+    @param low Lowest number of iterations in the range
+    @param high Highes number of iterations in the range
+    @param min_error Minimum accepted error in the aproximation
+    @return minimum number of iterations to get our minimum allowed error
+*/
 int binary_search(int low, int high, double min_error) {
     double error;
     while (low < high) {
@@ -84,14 +108,19 @@ int binary_search(int low, int high, double min_error) {
         else if (error < min_error)
             high = mid;
     }
-    return high; // Or low, as at this point low=high
+    return high;
 }
 
-/* Get the desired accuracy and return the Optimal Step
-to be used. Uses the following linear relation:
-log10(OptStep) = -0.4289*log10(Error) - 0.2138
-with R^2 = 0.9647
-See ex3_extended.cpp in https://github.com/jeiros/FunMath
+/* 
+    Compute the optimal search step for a given target error
+    Uses the following linear relation:
+    log10(OptStep) = -0.4289*log10(Error) - 0.2138
+    with R^2 = 0.9647
+    See ex3_extended.cpp in https://github.com/jeiros/FunMath
+    for an explanation
+
+    @param error Target minimum error in the aproximation
+    @return Optimal search step for the error given
 */
 int calculate_OptimalStep (double error) {
     double result = pow(10, (-0.4289*log10(error)) - 0.2138);
@@ -99,19 +128,16 @@ int calculate_OptimalStep (double error) {
     return optstep;
 }
 
-/*Print the Nmin for the desired accuracy using 
-big steps and then binary search, and the time it took to do so 
-(in CPU ticks and seconds)*/
 int main() {
     clock_t t;
     const double min_error = 1e-6; // Desired accuracy
 
     t = clock();
-    std::pair<int, int> answer = Nmin_range_search(min_error, calculate_OptimalStep(min_error)); // Use an Optimal Step 
+    std::pair<int, int> answer = Nmin_range_search(min_error, calculate_OptimalStep(min_error)); 
     int low_N = answer.first;
     int high_N = answer.second;
     int solution = binary_search(low_N, high_N, min_error);
-    t = clock() -t;
+    t = clock() - t;
     
     printf("Nmin is: %d\n", solution);
     printf ("It took me %d clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
