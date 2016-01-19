@@ -39,11 +39,12 @@ double compute_pi_error(double approximation) {
 the pi approximation and its error.*/
 int main() {
     int N[6] = {1, 2, 10, 50, 100, 500};
+    printf("Iteration\tPi approximation\tError\n");
     for (int i = 0; i < sizeof(N)/sizeof(N[0]); ++i) // Flexible size of array
     {
         double pi = aproximate_pi(N[i]);
         double error = compute_pi_error(pi);
-        printf ("Number of iterations:\t%d\tPi approximation:\t%F\tError:%E\n", N[i], pi, error);
+        printf ("%d\t\t%F\t\t%E\n", N[i], pi, error);
     }
     return 0;
 }
