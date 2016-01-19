@@ -99,7 +99,9 @@ int calculate_OptimalStep (double error) {
     return optstep;
 }
 
-
+/*Print the Nmin for the desired accuracy using 
+big steps and then binary search, and the time it took to do so 
+(in CPU ticks and seconds)*/
 int main() {
     clock_t t;
     const double min_error = 1e-6; // Desired accuracy
