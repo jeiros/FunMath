@@ -3,9 +3,9 @@ obj = $(src:.c=.o)
 CC = gcc
 LDFLAGS = -lGL -lglut -lpng -lz -lm -Wall -pedantic
 
-myprog: $(obj)
+coulomb.exe: $(obj)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 .PHONY: clean
 clean:
-	rm -f $(obj) myprog
+	rm -f $(obj) coulomb.exe
