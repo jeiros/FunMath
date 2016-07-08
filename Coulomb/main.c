@@ -16,9 +16,9 @@ int count_lines(FILE *fp) {
       }
     }
   }
-  printf("File has %d lines\n", n_lines);
   return n_lines; 
 }
+
 
 int main(int argc, char const *argv[]) {
   FILE * fp;
@@ -29,14 +29,16 @@ int main(int argc, char const *argv[]) {
     Atom *atom_list = malloc(n_lines * sizeof(Atom)); // Allocate memory for atom array
     int i;
     for (i = 0; i < n_lines; ++i) {
-      fscanf(fp, "%f %f %f %f\n", &atom_list[i].q, &atom_list[i].x,
-                                  &atom_list[i].y, &atom_list[i].z);
-      printf("%f %f %f %f\n", atom_list[i].q, atom_list[i].x,
-                              atom_list[i].y, atom_list[i].z);
+      fscanf(fp, "%lf %lf %lf %lf\n", &atom_list[i].q, &atom_list[i].x,
+                                      &atom_list[i].y, &atom_list[i].z);
+/*      printf("%lf\t%lf\t%lf\t%lf\n", atom_list[i].q, atom_list[i].x,
+                                      atom_list[i].y, atom_list[i].z);*/
     }
-
-    free(atom_list);
-    fclose(fp);
+    free(atom_list); // free up the memory
+    fclose(fp); // close the file
+  } else {
+    printf("No file. Please give file.\n");
+    return 1;
   }
   return 0;
 }
