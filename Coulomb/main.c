@@ -1,9 +1,8 @@
 #include <stdio.h>
-#include "distance.h"
 #include <time.h>
 #include <stdlib.h>
-#include "getForces.h"
-#include "force_vector.h"
+#include "atom.h"
+
 
 
 int count_lines(FILE *fp) {
