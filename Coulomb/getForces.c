@@ -1,5 +1,4 @@
-#include "getForces.h"
-#include "force_vector.h"
+#include "atom.h"
 #include <stdlib.h>
 #include <stdio.h>
 
