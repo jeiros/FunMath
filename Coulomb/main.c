@@ -5,6 +5,7 @@
 
 
 int count_lines(FILE *fp) {
+  // Counts the lines in a file object
   int n_lines;
   char ch;
   if (fp) {
@@ -15,12 +16,13 @@ int count_lines(FILE *fp) {
       }
     }
   }
- return n_lines; 
+  printf("File has %d lines\n", n_lines);
+  return n_lines; 
 }
 
 int main(int argc, char const *argv[]) {
   FILE * fp;
-  fp = fopen(argv[1], "r");
+  fp = fopen(argv[1], "r"); // Pass the file through the command line
   if (fp) {
     int n_lines = count_lines(fp); // Count lines in file
     rewind(fp); // Need to iterate again through the file
