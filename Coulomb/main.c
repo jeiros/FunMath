@@ -3,25 +3,38 @@
 #include <time.h>
 #include <stdlib.h>
 
-void populateAtomList(Atom atomlist[], double max_range) {
-  srand(time(NULL));
-  int i;
-  int n_atoms = sizeof(atomlist)/sizeof(atomlist[0]);
-  printf("Array is %d and should be 5\n", n_atoms);
-  for (i=0; i<n_atoms; i++) {
-    Atom temp_atom;
 
-    temp_atom.x = ((double)rand()/(double)(RAND_MAX)) * max_range;
-    temp_atom.y = ((double)rand()/(double)(RAND_MAX)) * max_range;
-    temp_atom.z = ((double)rand()/(double)(RAND_MAX)) * max_range;
-
-    atomlist[i] = temp_atom;
-    printf("Atom%d\t(%.2f,%.2f,%.2f)\n", i, temp_atom.x, temp_atom.y, temp_atom.z);
+int count_lines(FILE *fp) {
+  int n_lines;
+  char ch;
+  if (fp) {
+    while(!feof(fp)) {
+      ch = fgetc(fp);
+      if(ch == '\n') {
+        n_lines++;
+      }
+    }
   }
+ return n_lines; 
 }
 
-int main() {
-  Atom atomlist[5];
-  populateAtomList(atomlist, 10.0);
+int main(int argc, char const *argv[]) {
+  FILE * fp;
+  fp = fopen(argv[1], "r");
+  if (fp) {
+    int n_lines = count_lines(fp); // Count lines in file
+    rewind(fp); // Need to iterate again through the file
+    Atom *atom_list = malloc(n_lines * sizeof(Atom)); // Allocate memory for atom array
+    int i;
+    for (i = 0; i < n_lines; ++i) {
+      fscanf(fp, "%f %f %f %f\n", &atom_list[i].q, &atom_list[i].x,
+                                  &atom_list[i].y, &atom_list[i].z);
+      printf("%f %f %f %f\n", atom_list[i].q, atom_list[i].x,
+                              atom_list[i].y, atom_list[i].z);
+    }
+
+    free(atom_list);
+    fclose(fp);
+  }
   return 0;
 }
